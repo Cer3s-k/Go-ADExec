@@ -1,6 +1,7 @@
 package main
 
 import (
+	"Go-ADExec/cmd"
 	"fmt"
 )
 
@@ -13,4 +14,5 @@ func main() {
   \____/\____/     /_/  |_/_____/_____/_/|_|\___/\___/
 `
 	fmt.Print(logo)
+	cmd.Execute()
 }
