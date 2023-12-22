@@ -15,7 +15,7 @@ func init() {
 	rootCmd.AddCommand(adcsCmd)
 
 	// Disable the default generated completion command
-	rootCmd.CompletionOptions.DisableDefaultCmd = true
+	//rootCmd.CompletionOptions.DisableDefaultCmd = true
 
 }
 
