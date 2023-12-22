@@ -7,9 +7,9 @@ import (
 
 var abuseCmd = &cobra.Command{
 	Use:   "abuse",
-	Short: "redTeam abuse",
+	Short: "abuse the ActiveDirectory configuration",
 	Long:  "abuse the ActiveDirectory configuration",
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("[+] search.exe -h")
+		fmt.Println("[+] Go-ADExec abuse -h")
 	},
 }

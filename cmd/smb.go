@@ -7,9 +7,9 @@ import (
 
 var smbCmd = &cobra.Command{
 	Use:   "smb",
-	Short: "smb detection",
-	Long:  "attack using smb shares",
+	Short: "smb shares related attacks",
+	Long:  "smb shares related attacks",
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("[+] search.exe -h")
+		fmt.Println("[+] Go-ADExec smb -h")
 	},
 }

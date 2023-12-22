@@ -7,9 +7,9 @@ import (
 
 var ldapCmd = &cobra.Command{
 	Use:   "ldap",
-	Short: "ldap query",
+	Short: "ldap query ActiveDirectory configuration",
 	Long:  "ldap query ActiveDirectory configuration",
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("[+] ldap.exe -h")
+		fmt.Println("[+] Go-ADExec ldap -h")
 	},
 }
