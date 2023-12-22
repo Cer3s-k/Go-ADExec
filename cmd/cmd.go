@@ -24,7 +24,6 @@ var rootCmd = &cobra.Command{
 	Short:   "Golang AD tools",
 	Long:    "Go-ADExec是一款用Go编写的内网信息收集和利用工具",
 	Version: "1.0.0",
-	//ValidArgs: []string{"abuse", "adcs", "ldap", "smb"},
 }
 
 func Execute() {
