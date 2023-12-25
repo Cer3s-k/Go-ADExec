@@ -39,5 +39,6 @@ var smbCmd = &cobra.Command{
 		}
 		colors.PrintSuccess(config.UserName)
 		colors.PrintSuccess(config.UserPass)
+
 	},
 }
