@@ -1,7 +1,7 @@
 package cmd
 
 import (
-	"fmt"
+	"Go-ADExec/colors"
 	"github.com/spf13/cobra"
 )
 
@@ -10,6 +10,6 @@ var ldapCmd = &cobra.Command{
 	Short: "ldap query ActiveDirectory configuration",
 	Long:  "ldap query ActiveDirectory configuration",
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("[+] Go-ADExec ldap -h")
+		colors.PrintErrorf("Go-ADExec ldap -h")
 	},
 }

@@ -1,7 +1,7 @@
 package cmd
 
 import (
-	"fmt"
+	"Go-ADExec/colors"
 	"github.com/spf13/cobra"
 	"os"
 )
@@ -26,14 +26,18 @@ var smbCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		config, err := parseGlobalInfo(cmd)
 		if err != nil {
-			fmt.Println("[-] smb initialization failed...")
-			fmt.Println("[+] Go-ADExec smb --help")
+			colors.PrintError("smb initialization failed...")
+			colors.PrintError("Go-ADExec smb -h")
 			os.Exit(1)
 		}
 		if config == nil {
-			fmt.Println("config nil")
+			colors.PrintError("config nil")
 		}
-		fmt.Println(config.UserName)
-		fmt.Println(config.UserPass)
+		_, err = LdapConnect(config)
+		if err != nil {
+			os.Exit(1)
+		}
+		colors.PrintSuccess(config.UserName)
+		colors.PrintSuccess(config.UserPass)
 	},
 }

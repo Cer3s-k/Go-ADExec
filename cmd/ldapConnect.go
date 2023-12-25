@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	"Go-ADExec/colors"
 	"fmt"
 	"github.com/go-ldap/ldap/v3"
 )
@@ -13,23 +14,28 @@ type Connector struct {
 func LdapConnect(globalLogin *LoginInfo) (*Connector, error) {
 	conn, err := ldap.Dial("tcp", fmt.Sprintf("%s:389", globalLogin.DomainName))
 	if err != nil {
+		colors.PrintError("error: ", err)
 		return nil, err
 	}
 
 	//ldap connection binding
 	err = conn.Bind(globalLogin.UserName, globalLogin.UserPass)
 	if err != nil {
+		colors.PrintError("error: ", err)
 		return nil, err
 	}
-	searchRequest := ldap.NewSearchRequest(globalLogin.BaseDN, ldap.ScopeWholeSubtree, ldap.NeverDerefAliases, 0, 0, false, "objectClass=user", []string{"sAMAccountName"}, nil)
+	searchRequest := ldap.NewSearchRequest(globalLogin.BaseDN, ldap.ScopeWholeSubtree, ldap.NeverDerefAliases, 0, 0, false, "(objectClass=user)", []string{"sAMAccountName"}, nil)
 	search, err := conn.Search(searchRequest)
 	if err != nil {
+		colors.PrintError("error: ", err)
 		return nil, err
 	}
 	var sAMAccountName []string = make([]string, 0)
 	for j := range search.Entries {
 		sAMAccountName = append(sAMAccountName, search.Entries[j].Attributes[0].Values[0])
 	}
-	fmt.Println("sAMAccountName: ", sAMAccountName)
+	for i, sam := range sAMAccountName {
+		colors.PrintSuccessf("sAMAccountName[%d]: %s", i, sam)
+	}
 	return &Connector{Conn: conn, Config: globalLogin}, nil
 }

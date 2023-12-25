@@ -6,6 +6,7 @@ and initializing it based on the parameters passed in.
 package cmd
 
 import (
+	"Go-ADExec/colors"
 	"errors"
 	"fmt"
 	"github.com/spf13/cobra"
@@ -31,7 +32,7 @@ func parseGlobalInfo(cmd *cobra.Command) (config *LoginInfo, err error) {
 
 	domainName, err := cmd.Flags().GetString("domain")
 	if err != nil {
-		fmt.Printf("Failed to parse --domainName-- flag %s", err)
+		colors.PrintErrorf("Failed to parse --domainName-- flag %s", err)
 		return nil, err
 	}
 	if domainName == "" {
@@ -42,7 +43,7 @@ func parseGlobalInfo(cmd *cobra.Command) (config *LoginInfo, err error) {
 
 	userName, err := cmd.Flags().GetString("username")
 	if err != nil {
-		fmt.Printf("Failed to parse --username-- flag %s", err)
+		colors.PrintErrorf("Failed to parse --username-- flag %s", err)
 		return nil, err
 	}
 	if userName == "" {
@@ -53,7 +54,7 @@ func parseGlobalInfo(cmd *cobra.Command) (config *LoginInfo, err error) {
 
 	userPass, err := cmd.Flags().GetString("password")
 	if err != nil {
-		fmt.Printf("Failed to parse --password-- flag %s", err)
+		colors.PrintErrorf("Failed to parse --password-- flag %s", err)
 		return nil, err
 	}
 	if userPass == "" {
@@ -64,7 +65,7 @@ func parseGlobalInfo(cmd *cobra.Command) (config *LoginInfo, err error) {
 
 	userHash, err := cmd.Flags().GetString("hashes")
 	if err != nil {
-		fmt.Printf("Failed to parse --hash-- flag %s", err)
+		colors.PrintErrorf("Failed to parse --hash-- flag %s", err)
 		return nil, err
 	}
 	if userHash != "" {
@@ -73,7 +74,7 @@ func parseGlobalInfo(cmd *cobra.Command) (config *LoginInfo, err error) {
 
 	gssApi, err := cmd.Flags().GetString("gssapi")
 	if err != nil {
-		fmt.Printf("Failed to parse --gssapi-- flag %s", err)
+		colors.PrintErrorf("Failed to parse --gssapi-- flag %s", err)
 		return nil, err
 	}
 	if gssApi != "" {
@@ -82,7 +83,7 @@ func parseGlobalInfo(cmd *cobra.Command) (config *LoginInfo, err error) {
 
 	sslCon, err := cmd.Flags().GetBool("ssl")
 	if err != nil {
-		fmt.Printf("Failed to parse --ssl-- flag %s", err)
+		colors.PrintErrorf("Failed to parse --ssl-- flag %s", err)
 		return nil, err
 	}
 	if sslCon != false {
@@ -92,7 +93,7 @@ func parseGlobalInfo(cmd *cobra.Command) (config *LoginInfo, err error) {
 	domainNameArr := strings.Split(domainName, ".")
 	baseDN, err := cmd.Flags().GetString("basedn")
 	if err != nil {
-		fmt.Printf("Failed to parse --base dn-- flag %s", err)
+		colors.PrintErrorf("Failed to parse --base dn-- flag %s", err)
 		return nil, err
 	}
 	if baseDN == "" {
@@ -104,7 +105,7 @@ func parseGlobalInfo(cmd *cobra.Command) (config *LoginInfo, err error) {
 
 	output, err := cmd.Flags().GetString("output")
 	if err != nil {
-		fmt.Printf("Failed to parse --export-- flag %s", err)
+		colors.PrintErrorf("Failed to parse --export-- flag %s", err)
 		return nil, err
 	}
 	if output != "" {

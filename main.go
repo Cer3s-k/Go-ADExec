@@ -2,7 +2,7 @@ package main
 
 import (
 	"Go-ADExec/cmd"
-	"fmt"
+	"github.com/gookit/color"
 )
 
 func main() {
@@ -13,6 +13,6 @@ func main() {
   / /_/ / /_/ /_____/ ___ |/ /_/ / /____>  </  __/ /__  
   \____/\____/     /_/  |_/_____/_____/_/|_|\___/\___/
 `
-	fmt.Print(logo)
+	color.Cyan.Print(logo)
 	cmd.Execute()
 }

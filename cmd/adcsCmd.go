@@ -1,7 +1,7 @@
 package cmd
 
 import (
-	"fmt"
+	"Go-ADExec/colors"
 	"github.com/spf13/cobra"
 )
 
@@ -10,6 +10,6 @@ var adcsCmd = &cobra.Command{
 	Short: "Certificate related attacks",
 	Long:  "Certificate related attacks",
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("[+] Go-ADExec adcs -h")
+		colors.PrintErrorf("Go-ADExec adcs -h")
 	},
 }
