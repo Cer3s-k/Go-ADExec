@@ -33,6 +33,10 @@ var smbCmd = &cobra.Command{
 		if config == nil {
 			fmt.Println("config nil")
 		}
+		_, err = LdapConnect(config)
+		if err != nil {
+			os.Exit(1)
+		}
 		fmt.Println(config.UserName)
 		fmt.Println(config.UserPass)
 	},
