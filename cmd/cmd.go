@@ -9,12 +9,12 @@ func init() {
 
 	//add ldap、abuse、smb、adcs module
 	rootCmd.AddCommand(ldapCmd)
-	rootCmd.AddCommand(abuseCmd)
+	rootCmd.AddCommand(ntlmCmd)
 	rootCmd.AddCommand(smbCmd)
 	rootCmd.AddCommand(adcsCmd)
 
 	// Disable the default generated completion command
-	//rootCmd.CompletionOptions.DisableDefaultCmd = true
+	rootCmd.CompletionOptions.DisableDefaultCmd = true
 
 }
 

@@ -9,15 +9,19 @@ import (
 	"Go-ADExec/colors"
 	"errors"
 	"fmt"
+	"github.com/go-ldap/ldap/v3"
 	"github.com/spf13/cobra"
 	"strings"
 )
 
-type LoginInfo struct {
-	DomainName string
-	UserName   string
-	UserPass   string
-	UserHash   string
+type LdapInfo struct {
+	LdapServer string
+	LdapIP     string
+	Domain     string
+	User       string
+	Pass       string
+	Hash       string
+	Connect    *ldap.Conn
 	GssApi     string
 	SSLCon     bool
 	BaseDN     string
@@ -25,65 +29,65 @@ type LoginInfo struct {
 }
 
 // GlobalLoginInfo GlobalLogin global login struct
-var GlobalLoginInfo = LoginInfo{}
+var GlobalLoginInfo = LdapInfo{}
 
 // initialize the LoginInfo structure and return the content
-func parseGlobalInfo(cmd *cobra.Command) (config *LoginInfo, err error) {
+func parseGlobalInfo(cmd *cobra.Command) (config *LdapInfo, err error) {
 
 	domainName, err := cmd.Flags().GetString("domain")
 	if err != nil {
-		colors.PrintErrorf("Failed to parse --domainName-- flag %s", err)
+		colors.PrintErrorf("Failed to parse --domain flag %s", err)
 		return nil, err
 	}
 	if domainName == "" {
 		return nil, errors.New("domain name is not specified")
 	} else {
-		GlobalLoginInfo.DomainName = domainName
+		GlobalLoginInfo.Domain = strings.Trim(domainName, "'")
 	}
 
 	userName, err := cmd.Flags().GetString("username")
 	if err != nil {
-		colors.PrintErrorf("Failed to parse --username-- flag %s", err)
+		colors.PrintErrorf("Failed to parse --username flag %s", err)
 		return nil, err
 	}
 	if userName == "" {
 		return nil, errors.New("username is not specified")
 	} else {
-		GlobalLoginInfo.UserName = userName
+		GlobalLoginInfo.User = strings.Trim(userName, "'")
 	}
 
 	userPass, err := cmd.Flags().GetString("password")
 	if err != nil {
-		colors.PrintErrorf("Failed to parse --password-- flag %s", err)
+		colors.PrintErrorf("Failed to parse --password flag %s", err)
 		return nil, err
 	}
 	if userPass == "" {
 		return nil, errors.New("password is not specified")
 	} else {
-		GlobalLoginInfo.UserPass = userPass
+		GlobalLoginInfo.Pass = strings.Trim(userPass, "'")
 	}
 
 	userHash, err := cmd.Flags().GetString("hashes")
 	if err != nil {
-		colors.PrintErrorf("Failed to parse --hash-- flag %s", err)
+		colors.PrintErrorf("Failed to parse --hashes flag %s", err)
 		return nil, err
 	}
 	if userHash != "" {
-		GlobalLoginInfo.UserHash = userHash
+		GlobalLoginInfo.Hash = strings.Trim(userHash, "'")
 	}
 
 	gssApi, err := cmd.Flags().GetString("gssapi")
 	if err != nil {
-		colors.PrintErrorf("Failed to parse --gssapi-- flag %s", err)
+		colors.PrintErrorf("Failed to parse --gssapi flag %s", err)
 		return nil, err
 	}
 	if gssApi != "" {
-		GlobalLoginInfo.GssApi = gssApi
+		GlobalLoginInfo.GssApi = strings.Trim(gssApi, "'")
 	}
 
 	sslCon, err := cmd.Flags().GetBool("ssl")
 	if err != nil {
-		colors.PrintErrorf("Failed to parse --ssl-- flag %s", err)
+		colors.PrintErrorf("Failed to parse --ssl flag %s", err)
 		return nil, err
 	}
 	if sslCon != false {
@@ -93,29 +97,29 @@ func parseGlobalInfo(cmd *cobra.Command) (config *LoginInfo, err error) {
 	domainNameArr := strings.Split(domainName, ".")
 	baseDN, err := cmd.Flags().GetString("basedn")
 	if err != nil {
-		colors.PrintErrorf("Failed to parse --base dn-- flag %s", err)
+		colors.PrintErrorf("Failed to parse --basedn flag %s", err)
 		return nil, err
 	}
 	if baseDN == "" {
 		baseDN = fmt.Sprintf("dc=%s", strings.Join(domainNameArr, ",dc="))
 		GlobalLoginInfo.BaseDN = baseDN
 	} else {
-		GlobalLoginInfo.BaseDN = baseDN
+		GlobalLoginInfo.BaseDN = strings.Trim(baseDN, "'")
 	}
 
 	output, err := cmd.Flags().GetString("output")
 	if err != nil {
-		colors.PrintErrorf("Failed to parse --export-- flag %s", err)
+		colors.PrintErrorf("Failed to parse --output flag %s", err)
 		return nil, err
 	}
 	if output != "" {
-		GlobalLoginInfo.Output = output
+		GlobalLoginInfo.Output = strings.Trim(output, "'")
 	}
 
 	//format domain username
 	if !strings.Contains(userName, "@") && !strings.Contains(userName, "\\") {
-		userName = fmt.Sprintf("%s@%s", userName, domainName)
-		GlobalLoginInfo.UserName = userName
+		userName = fmt.Sprintf("%s@%s", strings.Trim(userName, "'"), domainName)
+		GlobalLoginInfo.User = userName
 	}
 
 	return &GlobalLoginInfo, nil
