@@ -13,6 +13,6 @@ func main() {
   / /_/ / /_/ /_____/ ___ |/ /_/ / /____>  </  __/ /__  
   \____/\____/     /_/  |_/_____/_____/_/|_|\___/\___/
 `
-	color.Cyan.Print(logo)
+	color.HEXStyle("#ff0097").Printf(logo)
 	cmd.Execute()
 }

@@ -142,17 +142,17 @@ func TestColor(t *testing.T) {
 		"赭石 #845a33",
 	}
 
-	//PrintSuccess("this is a success demo 111")
-	//PrintError("this is a error demo 222")
-	//PrintSuccessf("this is a format %s demo %s", "success111", "success222")
-	//PrintErrorf("this is a format %s demo %s", "error111", "error222")
+	PrintSuccess("this is a success demo 111")
+	PrintError("this is a error demo 222")
+	PrintSuccessf("this is a format %s demo %s", "success111", "success222")
+	PrintErrorf("this is a format %s demo %s", "error111", "error222")
 
 	//RGB
 	color.Infoln("\n==== Chinese traditional colors ====\n")
 	index := 1
 	for _, txt := range chinaColors {
 		nodes := strings.Split(txt, " ")
-		color.HEXStyle(nodes[1]).Printf("[+] this is a demo	")
+		color.HEXStyle(nodes[1]).Printf("[+] this is %s	", nodes[1])
 		if index%7 == 0 {
 			fmt.Println()
 		}
@@ -160,5 +160,4 @@ func TestColor(t *testing.T) {
 		index++
 	}
 	fmt.Println()
-	color.HEXStyle("#eaff56").Printf("hello world!!!!!")
 }

@@ -13,22 +13,27 @@ var magenta = color.Magenta.Render
 // PrintSuccess implementation of Println colors output when program execution success
 func PrintSuccess(args ...interface{}) {
 
-	fmt.Printf("%s %s\n", blue("[+]"), green(args...))
+	//fmt.Printf("%s %s\n", blue("[+]"), green(args...))
+	color.HEXStyle("#00e500").Printf("[+] ")
+	color.HEXStyle("#70f3ff").Printf("%s\n", args...)
 }
 
 // PrintSuccessf implementation of Printf colors output when program execution success
 func PrintSuccessf(format string, args ...interface{}) {
 	formats := fmt.Sprintf(format, args...)
-	fmt.Printf("%s %s\n", blue("[+]"), green(formats))
+	color.HEXStyle("#00e500").Printf("[+] ")
+	color.HEXStyle("#70f3ff").Printf("%s\n", formats)
 }
 
 // PrintError implementation of Println colors output when program execution error
 func PrintError(args ...interface{}) {
-	fmt.Printf("%s %s\n", red("[-]"), magenta(args...))
+	color.HEXStyle("#ff0097").Printf("[-] ")
+	color.HEXStyle("#ff2121").Printf("%s\n", args...)
 }
 
 // PrintErrorf implementation of Printf colors output when program execution error
 func PrintErrorf(format string, args ...interface{}) {
 	formats := fmt.Sprintf(format, args...)
-	fmt.Printf("%s %s\n", red("[-]"), magenta(formats))
+	color.HEXStyle("#ff0097").Printf("[-] ")
+	color.HEXStyle("#ff2121").Printf("%s\n", formats)
 }
