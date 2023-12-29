@@ -36,7 +36,7 @@ func parseGlobalInfo(cmd *cobra.Command) (config *LdapInfo, err error) {
 
 	domainName, err := cmd.Flags().GetString("domain")
 	if err != nil {
-		colors.PrintErrorf("Failed to parse --domain flag %s", err)
+		colors.ErrorPrintf("Failed to parse --domain flag %s\n", err)
 		return nil, err
 	}
 	if domainName == "" {
@@ -47,7 +47,7 @@ func parseGlobalInfo(cmd *cobra.Command) (config *LdapInfo, err error) {
 
 	userName, err := cmd.Flags().GetString("username")
 	if err != nil {
-		colors.PrintErrorf("Failed to parse --username flag %s", err)
+		colors.ErrorPrintf("Failed to parse --username flag %s\n", err)
 		return nil, err
 	}
 	if userName == "" {
@@ -58,18 +58,16 @@ func parseGlobalInfo(cmd *cobra.Command) (config *LdapInfo, err error) {
 
 	userPass, err := cmd.Flags().GetString("password")
 	if err != nil {
-		colors.PrintErrorf("Failed to parse --password flag %s", err)
+		colors.ErrorPrintf("Failed to parse --password flag %s\n", err)
 		return nil, err
 	}
-	if userPass == "" {
-		return nil, errors.New("password is not specified")
-	} else {
+	if userPass != "" {
 		GlobalLoginInfo.Pass = strings.Trim(userPass, "'")
 	}
 
 	userHash, err := cmd.Flags().GetString("hashes")
 	if err != nil {
-		colors.PrintErrorf("Failed to parse --hashes flag %s", err)
+		colors.ErrorPrintf("Failed to parse --hashes flag %s\n", err)
 		return nil, err
 	}
 	if userHash != "" {
@@ -78,7 +76,7 @@ func parseGlobalInfo(cmd *cobra.Command) (config *LdapInfo, err error) {
 
 	gssApi, err := cmd.Flags().GetString("gssapi")
 	if err != nil {
-		colors.PrintErrorf("Failed to parse --gssapi flag %s", err)
+		colors.ErrorPrintf("Failed to parse --gssapi flag %s\n", err)
 		return nil, err
 	}
 	if gssApi != "" {
@@ -87,7 +85,7 @@ func parseGlobalInfo(cmd *cobra.Command) (config *LdapInfo, err error) {
 
 	sslCon, err := cmd.Flags().GetBool("ssl")
 	if err != nil {
-		colors.PrintErrorf("Failed to parse --ssl flag %s", err)
+		colors.ErrorPrintf("Failed to parse --ssl flag %s\n", err)
 		return nil, err
 	}
 	if sslCon != false {
@@ -97,7 +95,7 @@ func parseGlobalInfo(cmd *cobra.Command) (config *LdapInfo, err error) {
 	domainNameArr := strings.Split(domainName, ".")
 	baseDN, err := cmd.Flags().GetString("basedn")
 	if err != nil {
-		colors.PrintErrorf("Failed to parse --basedn flag %s", err)
+		colors.ErrorPrintf("Failed to parse --basedn flag %s\n", err)
 		return nil, err
 	}
 	if baseDN == "" {
@@ -109,7 +107,7 @@ func parseGlobalInfo(cmd *cobra.Command) (config *LdapInfo, err error) {
 
 	output, err := cmd.Flags().GetString("output")
 	if err != nil {
-		colors.PrintErrorf("Failed to parse --output flag %s", err)
+		colors.ErrorPrintf("Failed to parse --output flag %s\n", err)
 		return nil, err
 	}
 	if output != "" {
@@ -120,6 +118,9 @@ func parseGlobalInfo(cmd *cobra.Command) (config *LdapInfo, err error) {
 	if !strings.Contains(userName, "@") && !strings.Contains(userName, "\\") {
 		userName = fmt.Sprintf("%s@%s", strings.Trim(userName, "'"), domainName)
 		GlobalLoginInfo.User = userName
+	}
+	if GlobalLoginInfo.Pass == "" && GlobalLoginInfo.Hash == "" {
+		colors.ErrorPrintln("you need at least one valid credential")
 	}
 
 	return &GlobalLoginInfo, nil

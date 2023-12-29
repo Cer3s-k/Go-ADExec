@@ -5,35 +5,44 @@ import (
 	"github.com/gookit/color"
 )
 
-var red = color.FgRed.Render
-var green = color.FgGreen.Render
-var blue = color.FgBlue.Render
-var magenta = color.Magenta.Render
-
-// PrintSuccess implementation of Println colors output when program execution success
-func PrintSuccess(args ...interface{}) {
+// SuccessPrintln success output when program execution
+func SuccessPrintln(args ...interface{}) {
 
 	//fmt.Printf("%s %s\n", blue("[+]"), green(args...))
 	color.HEXStyle("#00e500").Printf("[+] ")
 	color.HEXStyle("#70f3ff").Printf("%s\n", args...)
 }
 
-// PrintSuccessf implementation of Printf colors output when program execution success
-func PrintSuccessf(format string, args ...interface{}) {
+// SuccessPrintf success output when program execution
+func SuccessPrintf(format string, args ...interface{}) {
 	formats := fmt.Sprintf(format, args...)
 	color.HEXStyle("#00e500").Printf("[+] ")
-	color.HEXStyle("#70f3ff").Printf("%s\n", formats)
+	color.HEXStyle("#70f3ff").Printf("%s", formats)
 }
 
-// PrintError implementation of Println colors output when program execution error
-func PrintError(args ...interface{}) {
+// ErrorPrintln error output when program execution
+func ErrorPrintln(args ...interface{}) {
 	color.HEXStyle("#ff0097").Printf("[-] ")
 	color.HEXStyle("#ff2121").Printf("%s\n", args...)
 }
 
-// PrintErrorf implementation of Printf colors output when program execution error
-func PrintErrorf(format string, args ...interface{}) {
+// ErrorPrintf error output when program execution
+func ErrorPrintf(format string, args ...interface{}) {
 	formats := fmt.Sprintf(format, args...)
 	color.HEXStyle("#ff0097").Printf("[-] ")
-	color.HEXStyle("#ff2121").Printf("%s\n", formats)
+	color.HEXStyle("#ff2121").Printf("%s", formats)
+}
+
+// InfoPrintln information output when program execution
+func InfoPrintln(format string, args ...interface{}) {
+	formats := fmt.Sprintf(format, args...)
+	color.HEXStyle("#3eede7").Printf("[*] ")
+	color.HEXStyle("#3de1ad").Printf("%s\n", formats)
+}
+
+// InfoPrintf information output when program execution
+func InfoPrintf(format string, args ...interface{}) {
+	formats := fmt.Sprintf(format, args...)
+	color.HEXStyle("#3eede7").Printf("[*] ")
+	color.HEXStyle("#3de1ad").Printf("%s", formats)
 }

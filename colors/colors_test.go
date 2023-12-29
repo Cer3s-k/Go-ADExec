@@ -142,10 +142,11 @@ func TestColor(t *testing.T) {
 		"赭石 #845a33",
 	}
 
-	PrintSuccess("this is a success demo 111")
-	PrintError("this is a error demo 222")
-	PrintSuccessf("this is a format %s demo %s", "success111", "success222")
-	PrintErrorf("this is a format %s demo %s", "error111", "error222")
+	SuccessPrintln("this is a success demo 111")
+	ErrorPrintln("this is a error demo 222")
+	SuccessPrintf("this is a format %s demo %s\n", "success111", "success222")
+	ErrorPrintf("this is a format %s demo %s\n", "error111", "error222")
+	InfoPrintf("this is a info\n")
 
 	//RGB
 	color.Infoln("\n==== Chinese traditional colors ====\n")
