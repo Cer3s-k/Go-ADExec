@@ -1,31 +1,22 @@
-//go:build windows
+//go:build !windows
 
-package cmd
+package ldapaction
 
 import (
 	"Go-ADExec/colors"
 	"crypto/tls"
 	"fmt"
 	"github.com/go-ldap/ldap/v3"
-	"github.com/go-ldap/ldap/v3/gssapi"
 	"strings"
 )
 
 func LdapConnect(globalLogin *LdapInfo) (err error) {
-	var conn *ldap.Conn
-	var sspiConn *gssapi.SSPIClient
 
-	if globalLogin.GssApi != "" {
-		sspiConn, err = gssapi.NewSSPIClient()
-		if err != nil {
-			colors.ErrorPrintln(err)
-			return err
-		}
-	}
+	var conn *ldap.Conn
 
 	//no use TLS for SSL connections
 	if !globalLogin.SSLCon {
-		colors.InfoPrintf("Trying to connecting server ldap://%s:389\n", globalLogin.Domain)
+		colors.InfoPrintf("Trying to connecting server ldapaction://%s:389\n", globalLogin.Domain)
 		conn, err = ldap.Dial("tcp", fmt.Sprintf("%s:389", globalLogin.Domain))
 		if err != nil {
 			colors.ErrorPrintln(err)
@@ -67,14 +58,6 @@ func LdapConnect(globalLogin *LdapInfo) (err error) {
 		colors.InfoPrintf("ntlm-hash: %s\n", globalLogin.Hash)
 
 		_, err = conn.NTLMChallengeBind(req)
-		if err != nil {
-			colors.ErrorPrintln(err)
-			return err
-		}
-	} else {
-		colors.InfoPrintln("Trying to binging server with current token")
-
-		err = conn.GSSAPIBind(sspiConn, fmt.Sprintf("ldap/%s", globalLogin.GssApi), "")
 		if err != nil {
 			colors.ErrorPrintln(err)
 			return err

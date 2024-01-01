@@ -1,22 +1,31 @@
-//go:build !windows
+//go:build windows
 
-package cmd
+package ldapaction
 
 import (
 	"Go-ADExec/colors"
 	"crypto/tls"
 	"fmt"
 	"github.com/go-ldap/ldap/v3"
+	"github.com/go-ldap/ldap/v3/gssapi"
 	"strings"
 )
 
 func LdapConnect(globalLogin *LdapInfo) (err error) {
-
 	var conn *ldap.Conn
+	var sspiConn *gssapi.SSPIClient
+
+	if globalLogin.GssApi != "" {
+		sspiConn, err = gssapi.NewSSPIClient()
+		if err != nil {
+			colors.ErrorPrintln(err)
+			return err
+		}
+	}
 
 	//no use TLS for SSL connections
 	if !globalLogin.SSLCon {
-		colors.InfoPrintf("Trying to connecting server ldap://%s:389\n", globalLogin.Domain)
+		colors.InfoPrintf("Trying to connecting server ldapaction://%s:389\n", globalLogin.Domain)
 		conn, err = ldap.Dial("tcp", fmt.Sprintf("%s:389", globalLogin.Domain))
 		if err != nil {
 			colors.ErrorPrintln(err)
@@ -62,23 +71,18 @@ func LdapConnect(globalLogin *LdapInfo) (err error) {
 			colors.ErrorPrintln(err)
 			return err
 		}
+	} else {
+		colors.InfoPrintln("Trying to binging server with current token")
+
+		err = conn.GSSAPIBind(sspiConn, fmt.Sprintf("ldapaction/%s", globalLogin.GssApi), "")
+		if err != nil {
+			colors.ErrorPrintln(err)
+			return err
+		}
 	}
 
 	colors.InfoPrintln("Binding success")
 	globalLogin.Connect = conn
 
-	searchRequest := ldap.NewSearchRequest(globalLogin.BaseDN, ldap.ScopeWholeSubtree, ldap.NeverDerefAliases, 0, 0, false, "(objectClass=user)", []string{"sAMAccountName"}, nil)
-	search, err := conn.Search(searchRequest)
-	if err != nil {
-		colors.ErrorPrintln("error: ", err)
-		return err
-	}
-	var sAMAccountName []string = make([]string, 0)
-	for j := range search.Entries {
-		sAMAccountName = append(sAMAccountName, search.Entries[j].Attributes[0].Values[0])
-	}
-	for _, sam := range sAMAccountName {
-		colors.SuccessPrintln(sam)
-	}
 	return err
 }

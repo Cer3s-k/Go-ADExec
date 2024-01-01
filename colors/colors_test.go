@@ -144,9 +144,12 @@ func TestColor(t *testing.T) {
 
 	SuccessPrintln("this is a success demo 111")
 	ErrorPrintln("this is a error demo 222")
+	InfoPrintln("this is a info demo 222")
+	NormalPrintln("this is a normal demo 222")
 	SuccessPrintf("this is a format %s demo %s\n", "success111", "success222")
 	ErrorPrintf("this is a format %s demo %s\n", "error111", "error222")
-	InfoPrintf("this is a info\n")
+	InfoPrintf("this is a %s\n", "info")
+	NormalPrintf("this is a %s\n", "normal")
 
 	//RGB
 	color.Infoln("\n==== Chinese traditional colors ====\n")

@@ -7,10 +7,9 @@ import (
 
 // SuccessPrintln success output when program execution
 func SuccessPrintln(args ...interface{}) {
-
-	//fmt.Printf("%s %s\n", blue("[+]"), green(args...))
+	formats := fmt.Sprint(args...)
 	color.HEXStyle("#00e500").Printf("[+] ")
-	color.HEXStyle("#70f3ff").Printf("%s\n", args...)
+	color.HEXStyle("#70f3ff").Printf("%s\n", formats)
 }
 
 // SuccessPrintf success output when program execution
@@ -22,8 +21,9 @@ func SuccessPrintf(format string, args ...interface{}) {
 
 // ErrorPrintln error output when program execution
 func ErrorPrintln(args ...interface{}) {
+	formats := fmt.Sprint(args...)
 	color.HEXStyle("#ff0097").Printf("[-] ")
-	color.HEXStyle("#ff2121").Printf("%s\n", args...)
+	color.HEXStyle("#ff2121").Printf("%s\n", formats)
 }
 
 // ErrorPrintf error output when program execution
@@ -34,8 +34,8 @@ func ErrorPrintf(format string, args ...interface{}) {
 }
 
 // InfoPrintln information output when program execution
-func InfoPrintln(format string, args ...interface{}) {
-	formats := fmt.Sprintf(format, args...)
+func InfoPrintln(args ...interface{}) {
+	formats := fmt.Sprint(args...)
 	color.HEXStyle("#3eede7").Printf("[*] ")
 	color.HEXStyle("#3de1ad").Printf("%s\n", formats)
 }
@@ -45,4 +45,16 @@ func InfoPrintf(format string, args ...interface{}) {
 	formats := fmt.Sprintf(format, args...)
 	color.HEXStyle("#3eede7").Printf("[*] ")
 	color.HEXStyle("#3de1ad").Printf("%s", formats)
+}
+
+// NormalPrintln success output when program execution
+func NormalPrintln(args ...interface{}) {
+	formats := fmt.Sprint(args...)
+	color.HEXStyle("#70f3ff").Printf("%s\n", formats)
+}
+
+// NormalPrintf success output when program execution
+func NormalPrintf(format string, args ...interface{}) {
+	formats := fmt.Sprintf(format, args...)
+	color.HEXStyle("#70f3ff").Printf("%s", formats)
 }

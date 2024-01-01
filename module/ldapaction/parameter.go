@@ -1,9 +1,9 @@
-// Package cmd
+// Package ldapaction
 /*
 This file is responsible for defining the structure of ldap connection information
 and initializing it based on the parameters passed in.
 */
-package cmd
+package ldapaction
 
 import (
 	"Go-ADExec/colors"
@@ -31,8 +31,8 @@ type LdapInfo struct {
 // GlobalLoginInfo GlobalLogin global login struct
 var GlobalLoginInfo = LdapInfo{}
 
-// initialize the LoginInfo structure and return the content
-func parseGlobalInfo(cmd *cobra.Command) (config *LdapInfo, err error) {
+// ParseGlobalInfo initialize the LoginInfo structure and return the content
+func ParseGlobalInfo(cmd *cobra.Command) (config *LdapInfo, err error) {
 
 	domainName, err := cmd.Flags().GetString("domain")
 	if err != nil {
