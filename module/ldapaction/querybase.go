@@ -2,9 +2,13 @@ package ldapaction
 
 import (
 	"Go-ADExec/colors"
+	"Go-ADExec/module/acl"
 	"fmt"
+	"github.com/bwmarrin/go-objectsid"
 	"github.com/go-ldap/ldap/v3"
+	"strconv"
 	"strings"
+	"time"
 )
 
 // CustomSearch custom ldap search
@@ -58,12 +62,16 @@ func queryPrint(queryResult []*ldap.Entry) {
 
 	// judge output
 	for _, entry := range queryResult {
-		successResult = fmt.Sprintf("%s\n", entry.DN)
+		if cnToName(entry.DN) != "" {
+			successResult = fmt.Sprintf("%s\n", cnToName(entry.DN))
+		} else {
+			successResult = ""
+		}
 
 		for _, v := range entry.Attributes {
 			switch v.Name {
 			case "nTSecurityDescriptor", "msDS-AllowedToActOnBehalfOfOtherIdentity":
-				colors.SuccessPrintln("this is s acl related")
+				colors.NormalPrintln("this is s acl related")
 				//sr, err := sddl.NewSecurityDescriptor(v.ByteValues[0])
 				//if err != nil {
 				//	log.PrintErrorf("%s\n%s\n", "resolve nTSecurityDescriptor error:", err.Error())
@@ -108,24 +116,33 @@ func queryPrint(queryResult []*ldap.Entry) {
 				//}
 				//
 				//result.WriteString(fmt.Sprintf("    %s: %s\n", v.Name, endResult.String()))
+			case "objectSid":
+				binarySid := v.ByteValues[0]
+				// Decode the binary objectSid into a SID object
+				sid := objectsid.Decode(binarySid)
+				attResult.WriteString(fmt.Sprintf("    %s: %s\n", v.Name, sid))
 
-			case "lastLogon":
-				colors.SuccessPrintln("this is a time related")
-				//dateString, err := transform.TimeToString(v.Values[0])
-				//if err != nil {
-				//	log.PrintErrorf("%s\n%s\n", "resolve lastlogon error: ", err.Error())
-				//	return
-				//}
-				//result.WriteString(fmt.Sprintf("    %s: %s\n", v.Name, dateString))
+			case "lastLogon", "lastLogoff", "lastLogonTimestamp", "pwdLastSet", "badPasswordTime":
+				if strings.EqualFold(v.Values[0], "0") {
+					attResult.WriteString(fmt.Sprintf("    %s: %s\n", v.Name, "0"))
+				} else {
+					tInt, err := strconv.Atoi(v.Values[0])
+					if err != nil {
+						colors.ErrorPrintln("err: ", err)
+					}
+
+					dataInt := (tInt / 10000000) - 11644473600
+					tm := time.Unix(int64(dataInt), 0)
+					attResult.WriteString(fmt.Sprintf("    %s: %s\n", v.Name, tm.String()))
+				}
+
 			case "objectGUID":
-				colors.SuccessPrintln("this is GUID related")
-				//toString, err := guid.GuidToString(v.ByteValues[0])
-				//if err != nil {
-				//	log.PrintErrorf("%s\n%s\n", "resolve objectGUID error: ", err.Error())
-				//	return
-				//}
-				//
-				//result.WriteString(fmt.Sprintf("    %s: %s\n", v.Name, toString))
+				guid, err := acl.GuidToString(v.ByteValues[0])
+				if err != nil {
+					colors.ErrorPrintf("resolve objectGUID error: %s\n", err.Error())
+					return
+				}
+				attResult.WriteString(fmt.Sprintf("    %s: %s\n", v.Name, guid))
 
 			default:
 				t := fmt.Sprintf("\n    %s: ", v.Name)
@@ -149,8 +166,13 @@ func queryPrint(queryResult []*ldap.Entry) {
 
 		// deal with the results
 		if len(queryResult) < 50 && QueryInfo.Global.Output == "" {
-			colors.SuccessPrintf(successResult)
-			colors.NormalPrintf(normalResult)
+			if successResult != "" {
+				colors.SuccessPrintf(successResult)
+				colors.NormalPrintf(normalResult)
+			} else {
+				colors.SuccessPrintf("%s\n", strings.TrimSpace(normalResult))
+			}
+
 		} else {
 			isWrite = true
 			//log.SaveResultStr = "result.txt"
@@ -211,4 +233,21 @@ func removeDuplicate(arr []string) []string {
 	}
 
 	return resArr
+}
+
+// convert Distinguished to name
+func cnToName(dn string) string {
+	var lastCN string
+	parts := strings.Split(dn, ",")
+	for i := len(parts) - 1; i >= 0; i-- {
+		if strings.HasPrefix(parts[i], "CN=") {
+			lastCN = strings.TrimPrefix(parts[i], "CN=")
+		} else if strings.HasPrefix(parts[i], "DC=") {
+			lastCN = dn
+		} else {
+			lastCN = parts[0]
+		}
+	}
+
+	return lastCN
 }

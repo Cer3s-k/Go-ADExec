@@ -19,10 +19,13 @@ func init() {
 }
 
 var rootCmd = &cobra.Command{
-	Use:     "Go-ADExec",
-	Short:   "Golang AD tools",
-	Long:    "Go-ADExec是一款用Go编写的内网信息收集和利用工具",
-	Version: "1.0.0",
+	Use:   "Go-ADExec",
+	Short: "Golang AD tools",
+	Long: `
+Go-ADExec是一款用Go编写的内网信息收集和利用工具
+version: 1.0.0
+author: Cer3s
+	`,
 }
 
 func Execute() {

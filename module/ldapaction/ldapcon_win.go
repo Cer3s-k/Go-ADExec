@@ -25,7 +25,7 @@ func LdapConnect(globalLogin *LdapInfo) (err error) {
 
 	//no use TLS for SSL connections
 	if !globalLogin.SSLCon {
-		colors.InfoPrintf("Trying to connecting server ldapaction://%s:389\n", globalLogin.Domain)
+		colors.InfoPrintf("Trying to connecting server ldap://%s:389\n", globalLogin.Domain)
 		conn, err = ldap.Dial("tcp", fmt.Sprintf("%s:389", globalLogin.Domain))
 		if err != nil {
 			colors.ErrorPrintln(err)

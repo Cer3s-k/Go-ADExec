@@ -52,6 +52,12 @@ func init() {
 	ldapCmd.Flags().StringSliceVarP(&ldapaction.QueryInfo.Attr.Attributes, "attributes", "a", nil, "ldap attribute of search output(default: distinguishedName)")
 
 	//common commands
-	ldapCmd.AddCommand(ldapaction.UserInfoCmd)
-
+	ldapCmd.AddCommand(ldapaction.DomainAdminCmd)
+	ldapCmd.AddCommand(ldapaction.DomainControllersCmd)
+	ldapCmd.AddCommand(ldapaction.DomainMAQCmd)
+	ldapCmd.AddCommand(ldapaction.DomainOUCmd)
+	ldapCmd.AddCommand(ldapaction.DomainComputerCmd)
+	ldapCmd.AddCommand(ldapaction.DomainUserCmd)
+	ldapCmd.AddCommand(ldapaction.DomainGroupCmd)
+	ldapCmd.AddCommand(ldapaction.DomainBaseInfoCmd)
 }

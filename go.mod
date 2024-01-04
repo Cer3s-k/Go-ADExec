@@ -3,6 +3,7 @@ module Go-ADExec
 go 1.20
 
 require (
+	github.com/bwmarrin/go-objectsid v0.0.0-20191126144531-5fee401a2f37
 	github.com/go-ldap/ldap/v3 v3.4.6
 	github.com/gookit/color v1.5.4
 	github.com/spf13/cobra v1.8.0
