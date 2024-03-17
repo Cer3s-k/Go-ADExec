@@ -4,7 +4,7 @@ import "Go-ADExec/colors"
 
 // query for Domain Admins
 func domainAdminQuery(query *queryConfig) {
-	filter := "(&(objectCategory=group)(adminCount=1))"
+	filter := "(&(objectCategory=group)(sAMAccountName=Domain Admins))"
 	attributes := []string{"member"}
 	query.Attr.Filter = filter
 	query.Attr.Attributes = attributes
