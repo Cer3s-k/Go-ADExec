@@ -16,7 +16,7 @@ func LdapConnect(globalLogin *LdapInfo) (err error) {
 
 	//no use TLS for SSL connections
 	if !globalLogin.SSLCon {
-		colors.InfoPrintf("Trying to connecting server ldapaction://%s:389\n", globalLogin.Domain)
+		colors.InfoPrintf("Trying to connecting server ldap://%s:389\n", globalLogin.Domain)
 		conn, err = ldap.Dial("tcp", fmt.Sprintf("%s:389", globalLogin.Domain))
 		if err != nil {
 			colors.ErrorPrintln(err)
@@ -67,18 +67,18 @@ func LdapConnect(globalLogin *LdapInfo) (err error) {
 	colors.InfoPrintln("Binding success")
 	globalLogin.Connect = conn
 
-	searchRequest := ldap.NewSearchRequest(globalLogin.BaseDN, ldap.ScopeWholeSubtree, ldap.NeverDerefAliases, 0, 0, false, "(objectClass=user)", []string{"sAMAccountName"}, nil)
-	search, err := conn.Search(searchRequest)
-	if err != nil {
-		colors.ErrorPrintln("error: ", err)
-		return err
-	}
-	var sAMAccountName []string = make([]string, 0)
-	for j := range search.Entries {
-		sAMAccountName = append(sAMAccountName, search.Entries[j].Attributes[0].Values[0])
-	}
-	for _, sam := range sAMAccountName {
-		colors.SuccessPrintln(sam)
-	}
+	//searchRequest := ldap.NewSearchRequest(globalLogin.BaseDN, ldap.ScopeWholeSubtree, ldap.NeverDerefAliases, 0, 0, false, "(objectClass=user)", []string{"sAMAccountName"}, nil)
+	//search, err := conn.Search(searchRequest)
+	//if err != nil {
+	//	colors.ErrorPrintln("error: ", err)
+	//	return err
+	//}
+	//var sAMAccountName []string = make([]string, 0)
+	//for j := range search.Entries {
+	//	sAMAccountName = append(sAMAccountName, search.Entries[j].Attributes[0].Values[0])
+	//}
+	//for _, sam := range sAMAccountName {
+	//	colors.SuccessPrintln(sam)
+	//}
 	return err
 }
